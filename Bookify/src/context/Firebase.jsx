@@ -1,13 +1,16 @@
 import { createContext, useContext, useEffect, useState } from "react";
 import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, GoogleAuthProvider, signInWithPopup, onAuthStateChanged, signOut  } from "firebase/auth";
 
-import { getDoc, getFirestore, doc, query, where } from "firebase/firestore";
+import { getDoc, getFirestore, doc, query, where, updateDoc } from "firebase/firestore";
 // Import the functions you need from the SDKs you need
 import { initializeApp } from "firebase/app";
 
 import { getDownloadURL, getStorage , ref, uploadBytes } from "firebase/storage"
 // import { getAnalytics } from "firebase/analytics";
 import { collection, addDoc, getDocs } from "firebase/firestore"; 
+
+//mytry
+import { getDatabase, onValue } from "firebase/database";
 
 
 const FirebaseContext = createContext(null)
@@ -78,13 +81,14 @@ export const FirebaseProvider = (props)=>{
     })
 
     //Listing data
-     const handleCreateNewListing = async (bookName, isbnNumber, price,coverPic) =>{
+     const handleCreateNewListing = async (bookName, isbnNumber, price,coverPic,amount) =>{
         const imgRef = ref(storage, `uploads/images/${Date.now()}-${coverPic.name}`)
         const uploadResult = await uploadBytes(imgRef, coverPic)
         return await addDoc(collection(db, 'books'),{
             bookName,
             isbnNumber,
             price,
+            amount,
             imgURL: uploadResult.ref.fullPath,
             userID: user.uid,
             userEmail: user.email,
@@ -125,14 +129,35 @@ export const FirebaseProvider = (props)=>{
 
         const result = await getDocs(q)
         console.log("result",result)
-        // console.log("jjjjj", result)
         return result
      }
 
      const getOrders = async (bookId)=>{
         const collectionRef = collection(db,'books',bookId,'orders')
         const result = await getDocs(collectionRef)
+        console.log("RESULT",result)
         return result
+     }
+
+
+    //  database = getDatabase()
+     const setAmount = async (bookId, amount)=>{
+        const amountRef = doc(db,"books",bookId)
+        await updateDoc(amountRef,{
+            amount: Number(amount)
+        })
+     }
+
+     //EditBook
+     const editListing = async(bookId, bookName, isbnNumber, price, amount)=>{
+        const listRef = doc(db,"books",bookId)
+        await updateDoc(listRef,{
+            bookName,
+            isbnNumber,
+            price,
+            amount,
+        })
+
      }
 
 
@@ -153,6 +178,8 @@ export const FirebaseProvider = (props)=>{
     fetchMyBooks,
     user,
     signMeOut,
-    getOrders }}>{props.children}
+    getOrders,
+    setAmount,
+    editListing }}>{props.children}
     </FirebaseContext.Provider>)
 }

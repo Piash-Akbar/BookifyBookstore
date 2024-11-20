@@ -9,6 +9,7 @@ import ListingPage from "./pages/ListingPage"
 import BookDetail from "./pages/BookDetail"
 import ViewOrders from "./pages/ViewOrders"
 import ViewOrderDetails from "./pages/ViewOrderDetails"
+import EditBook from "./pages/EditBook"
 
 function App() {
 
@@ -24,6 +25,7 @@ function App() {
       <Route path="/books/view/:bookId" element={<BookDetail />} />
       <Route path="/books/orders" element={<ViewOrders />} />
       <Route path="/books/orders/:bookId" element={<ViewOrderDetails />} />
+      <Route path="/books/edit/:bookId" element={<EditBook />} />
 
 
     </Routes>

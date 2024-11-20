@@ -15,25 +15,37 @@ function BookCard(props) {
 
   const navigate= useNavigate()
 
-  // console.log(props)
+  // console.log(props.userEmail)
 
-  return (
-    <div className="mt-5">
+  
+    
+    return (
+      <div className="mt-5">
+  
+      <Card style={{ width: '18rem', margin:'5px', borderRadius:'10px', backgroundColor:'wheat' }}>
+        <Card.Img style={{height: '12rem'}} variant="top" src={url} />
+        <Card.Body>
+          <Card.Title>Title: {props.bookName} <br /></Card.Title>
+          <Card.Text>
 
-    <Card style={{ width: '18rem', margin:'5px', borderRadius:'10px', backgroundColor:'wheat' }}>
-      <Card.Img variant="top" src={url} />
-      <Card.Body>
-        <Card.Title>Title: {props.bookName} <br /></Card.Title>
-        <Card.Text>
-          
-          Seller: {props.displayName} <br />
-          Price: {props.price} <br />
-        </Card.Text>
-        <Button onClick={e => navigate(props.link)} variant="primary">View</Button>
-      </Card.Body>
-    </Card>
-    </div>
-  );
-}
+            Seller: {props.displayName} <br />
+            Price: {props.price} <br />
+            {props.amount} units left <br />
+          </Card.Text>
+  
+          {/* If statement will take here to verify if it's my added book or not  */}
+         
+  
+          <Button onClick={e => navigate(props.link)} variant="primary">{firebase.user.uid === props.userID ? "Edit" : "View"}</Button>
+        </Card.Body>
+      </Card>
+      </div>
+    );
+  }
+  
+
+
+
+
 
 export default BookCard;

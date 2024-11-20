@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from 'react'
 import { useFirebase } from '../context/Firebase'
 import BookCard from '../components/BookCard'
+import CardGroup from 'react-bootstrap/CardGroup';
+
 
 function ViewOrders() {
     const firebase = useFirebase()
@@ -10,11 +12,12 @@ function ViewOrders() {
         if(firebase.isLoggedIn){
 
           firebase.fetchMyBooks(firebase.user.uid)?.then((books) => setBooks(books.docs))
+          
         }
 
     },[firebase]);
 
-    // console.log("Ordered books:", books)
+    console.log("Ordered books:", books)
 
     if(!firebase.isLoggedIn){
         return(
@@ -26,9 +29,11 @@ function ViewOrders() {
 
   return (
     <div>
-      {
-        books.map(book => <BookCard link={`/books/orders/${book.id}`} key= {book.id} id= {book.id} {...book.data()} />)
-      }
+      <CardGroup>
+        {
+          books.map(book => <BookCard link={`/books/orders/${book.id}`} key= {book.id} id= {book.id} {...book.data()} />)
+        }
+      </CardGroup>
     </div>
   )
 }

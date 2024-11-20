@@ -9,12 +9,13 @@ const ListingPage = () => {
     const [isbnNumber, setIsbnNumber] = useState('')
     const [price, setPrice] = useState('')
     const [coverPic, setCoverPic] = useState('')
+    const [amount,setAmount] = useState('')
 
     const firebase = useFirebase()
 
     const handleSubmit = async (e)=>{
         e.preventDefault();
-        await firebase.handleCreateNewListing(bookName,isbnNumber,price,coverPic);
+        await firebase.handleCreateNewListing(bookName,isbnNumber,price,coverPic,amount);
 
     }
 
@@ -36,6 +37,11 @@ const ListingPage = () => {
             <Form.Group className="mb-3" controlId="formBasicPassword">
                 <Form.Label>Price</Form.Label>
                 <Form.Control onChange={(e)=> setPrice(e.target.value)} value={price} type="text" placeholder="Enter price" />
+            </Form.Group>
+
+            <Form.Group className="mb-3" controlId="formBasicPassword">
+                <Form.Label>Amount</Form.Label>
+                <Form.Control onChange={(e)=> setAmount(Number(e.target.value))} value={amount} type="text" placeholder="Enter amount" />
             </Form.Group>
 
             <Form.Group className="mb-3" controlId="formBasicPassword">
